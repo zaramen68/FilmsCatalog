@@ -6,23 +6,6 @@
         ViewData["Title"] = "Create";
 }
 
-@{ WebImage photo = null;
-            var newFileName = "";
-            var imagePath = "";
-
-        if (this.ViewContext.HttpContext.Request.Method == "POST")
-        {
-            photo = WebImage.GetImageFromRequest();
-            if (photo != null)
-            {
-                newFileName = Guid.NewGuid().ToString() + "_" +
-                     System.IO.Path.GetFileName(photo.FileName);
-                imagePath = @"images\" + newFileName;
-
-                photo.Save(@"~\" + imagePath);
-            }
-}
-}
 <h1>Create</h1>
 
 <h4>Film</h4>
@@ -57,15 +40,44 @@
             </div>
             <div class="form-group">
                 <label asp-for="Poster" class="control-label"></label>
-                <input asp-for="Poster" class="form-control" type ="file" />
+                <input asp-for="Poster" class="form-control" type="file" />
+
                 <span asp-validation-for="Poster" class="figure-img"></span>
+
+
+
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
+        @{ WebImage photo = null;
+            var newFileName = "";
+            var imagePath = "";
+
+            if (this.ViewContext.HttpContext.Request.Method == "POST")
+            {
+                photo = WebImage.GetImageFromRequest();
+                if (photo != null)
+                {
+                    newFileName = Guid.NewGuid().ToString() + "_" +
+                         System.IO.Path.GetFileName(photo.FileName);
+                    imagePath = @"images\" + newFileName;
+
+                    photo.Save(@"~\" + imagePath);
+                }
+            }
+        }
+        @if (imagePath != "")
+        {
+            <div class="result">
+                <img src="@imagePath" alt="image" />
+
+            </div>
+        }
     </div>
-</div>
+    </div>
+
 
 <div>
     <a asp-action="Index">Back to List</a>
