@@ -143,80 +143,32 @@ namespace TestAspFilm.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateFilm(byte[] p)
+        public async Task<IActionResult> CreateFilm(List<IFormFile> files)
         {
            
+                long size = files.Sum(f => f.Length);
 
-            // Accumulate the form data key-value pairs in the request (formAccumulator).
-            var formAccumulator = new KeyValueAccumulator();
-            var trustedFileNameForDisplay = string.Empty;
-            var untrustedFileNameForStorage = string.Empty;
-            var streamedFileContent = Array.Empty<byte>();
-
-            var boundary = MultipartRequestHelper.GetBoundary(
-                MediaTypeHeaderValue.Parse(Request.ContentType),
-                1024);
-            var reader = new MultipartReader(boundary, HttpContext.Request.Body);
-
-            var section = await reader.ReadNextSectionAsync();
-
-            while (section != null)
-            {
-                var hasContentDispositionHeader =
-                    ContentDispositionHeaderValue.TryParse(
-                        section.ContentDisposition, out var contentDisposition);
-
-                if (hasContentDispositionHeader)
+                foreach (var formFile in files)
                 {
-                    if (MultipartRequestHelper
-                        .HasFileContentDisposition(contentDisposition))
+                    if (formFile.Length > 0)
                     {
-                        untrustedFileNameForStorage = contentDisposition.FileName.Value;
-                        // Don't trust the file name sent by the client. To display
-                        // the file name, HTML-encode the value.
-                        trustedFileNameForDisplay = WebUtility.HtmlEncode(
-                                contentDisposition.FileName.Value);
-                        var encoding = GetEncoding(section);
+                        var filePath = Path.GetTempFileName();
 
-                        using (var streamReader = new StreamReader(
-                            section.Body,
-                            encoding,
-                            detectEncodingFromByteOrderMarks: true,
-                            bufferSize: 1024,
-                            leaveOpen: true))
+                        using (var stream = System.IO.File.Create(filePath))
                         {
-                            // The value length limit is enforced by 
-                            // MultipartBodyLengthLimit
-                            var value = await streamReader.ReadToEndAsync();
-
-                            if (string.Equals(value, "undefined",
-                                StringComparison.OrdinalIgnoreCase))
-                            {
-                                value = string.Empty;
-                            }
-
-                           
-
-                            if (formAccumulator.ValueCount >
-                                1024)
-                            {
-                                // Form key count limit of 
-                                // _defaultFormOptions.ValueCountLimit 
-                                // is exceeded.
-                                ModelState.AddModelError("File",
-                                    $"The request couldn't be processed (Error 3).");
-                                // Log error
-
-                                return BadRequest(ModelState);
-                            }
+                            await formFile.CopyToAsync(stream);
                         }
                     }
                 }
 
-                // Drain any remaining section body that hasn't been consumed and
-                // read the headers for the next section.
-                section = await reader.ReadNextSectionAsync();
-            }
+                // Process uploaded files
+                // Don't rely on or trust the FileName property without validation.
+
+               
+
+
+
+
 
             return NoContent();
 
