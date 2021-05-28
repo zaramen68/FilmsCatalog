@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FilmsCatalog.Data;
 using FilmsCatalog.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace TestAspFilm.Controllers
 {
@@ -52,6 +53,24 @@ namespace TestAspFilm.Controllers
             return View();
         }
 
+        // GET: Films/CreateFilm
+        public IActionResult CreateFilm()
+        {
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
+            return View();
+        }
+
+        // POST: Films/CreateFilm 
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateFilm( IFormFile file)
+        {
+            Console.WriteLine("изображение получено");
+
+            return NoContent();
+        }
         // POST: Films/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.

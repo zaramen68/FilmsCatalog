@@ -1,0 +1,47 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using System.Web.Helpers
+
+@{ WebImage photo = null;
+    var newFileName = "";
+    var imagePath = "";
+
+    if (this.ViewContext.HttpContext.Request.Method == "POST")
+    {
+        photo = WebImage.GetImageFromRequest();
+        if (photo != null)
+        {
+            newFileName = Guid.NewGuid().ToString() + "_" +
+                System.IO.Path.GetFileName(photo.FileName);
+            imagePath = @"images\" + newFileName;
+
+            photo.Save(@"~\" + imagePath);
+        }
+    }
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Upload</title>
+</head>
+<body>
+    <form action="" method="post" enctype="multipart/form-data">
+        <fieldset>
+            <legend> Upload Image </legend>
+            <label for="Image">Image</label>
+            <input type="file" name="Image" />
+            <br />
+            <input type="submit" value="Upload" />
+        </fieldset>
+    </form>
+    <h1>Uploaded Image</h1>
+    @if (imagePath != "")
+    {
+        <div class="result">
+            <img src="@imagePath" alt="image" />
+
+        </div>
+    }
+</body>
+</html>
