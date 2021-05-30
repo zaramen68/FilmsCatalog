@@ -1,27 +1,11 @@
-﻿@page
+﻿
 @model FilmsCatalog.Views.Films.CreateFilmModel
 
 
 @using System.Web.Helpers
 
 
-@{ WebImage photo = null;
-  var newFileName = "";
-  var imagePath = "";
 
-  if (this.ViewContext.HttpContext.Request.Method == "POST")
-  {
-      photo = WebImage.GetImageFromRequest();
-      if (photo != null)
-      {
-          newFileName = Guid.NewGuid().ToString() + "_" +
-              System.IO.Path.GetFileName(photo.FileName);
-          imagePath = @"images\" + newFileName;
-
-          photo.Save(@"~\" + imagePath);
-      }
-  }
-}
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,12 +22,5 @@
         </fieldset>
     </form>
     <h1>Uploaded Image</h1>
-    @if (imagePath != "")
-    {
-        <div class="result">
-            <img src="@imagePath" alt="image" />
-
-        </div>
-    }
 </body>
 </html>

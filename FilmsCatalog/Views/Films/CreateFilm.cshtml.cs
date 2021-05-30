@@ -42,7 +42,7 @@ using Microsoft.Extensions.Configuration;
             // public void OnGet()
             //{
             //}
-            /*
+            
             public async Task<IActionResult> OnPostUploadAsync()
             {
                 if (!ModelState.IsValid)
@@ -51,12 +51,12 @@ using Microsoft.Extensions.Configuration;
 
                     return Page();
                 }
-
+                /*
                 var formFileContent =
                     await FileHelpers.ProcessFormFile<BufferedSingleFileUploadPhysical>(
                         FileUpload.FormFile, ModelState, _permittedExtensions,
                         _fileSizeLimit);
-
+                */
                 if (!ModelState.IsValid)
                 {
                     Result = "Please correct the form.";
@@ -82,16 +82,16 @@ using Microsoft.Extensions.Configuration;
 
                 using (var fileStream = System.IO.File.Create(filePath))
                 {
-                    await fileStream.WriteAsync(formFileContent);
+                   // await fileStream.WriteAsync(formFileContent);
 
                     // To work directly with a FormFile, use the following
                     // instead:
-                    //await FileUpload.FormFile.CopyToAsync(fileStream);
+                    await FileUpload.FormFile.CopyToAsync(fileStream);
                 }
 
                 return RedirectToPage("./Index");
             }
-            */
+            
         }
 
         public class BufferedSingleFileUploadPhysical

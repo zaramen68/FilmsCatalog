@@ -144,23 +144,22 @@ namespace TestAspFilm.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateFilm(List<IFormFile> files)
+        public async Task<IActionResult> CreateFilm(IFormFile files)
         {
            
-                long size = files.Sum(f => f.Length);
+               // long size = files.Sum(f => f.Length);
 
-                foreach (var formFile in files)
-                {
-                    if (formFile.Length > 0)
+              
+                    if (files.Length > 0)
                     {
                         var filePath = Path.GetTempFileName();
 
                         using (var stream = System.IO.File.Create(filePath))
                         {
-                            await formFile.CopyToAsync(stream);
+                            await files.CopyToAsync(stream);
                         }
                     }
-                }
+                
 
                 // Process uploaded files
                 // Don't rely on or trust the FileName property without validation.
@@ -213,12 +212,14 @@ namespace TestAspFilm.Controllers
             // POST: Films/Create
             // To protect from overposting attacks, enable the specific properties you want to bind to, for 
             // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-            [HttpPost]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Year,Director,UserId,Poster")] Film film)
+       // public async Task<IActionResult> Create([Bind("Id,Name,Description,Year,Director,UserId,Poster")] Film film)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,Year,Director,UserId,Poster")] PostFilm film)
         {
             if (ModelState.IsValid)
             {
+
                 _context.Add(film);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
