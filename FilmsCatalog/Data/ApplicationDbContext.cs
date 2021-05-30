@@ -26,6 +26,7 @@ namespace FilmsCatalog.Data
         */
 
         public DbSet<Film> Films { get; set; }
+        public DbSet<FileModel> Files { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         { 
