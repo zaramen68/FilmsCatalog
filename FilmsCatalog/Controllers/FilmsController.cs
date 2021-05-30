@@ -175,6 +175,11 @@ namespace TestAspFilm.Controllers
 
         }
 
+        public IActionResult UploadPost()
+        {
+            return View(_context.Files.ToList());
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddFile(IFormFile uploadedFile)
         {
@@ -201,7 +206,7 @@ namespace TestAspFilm.Controllers
             }
 
             //return RedirectToAction("");
-            return View(_context.Files.ToList());
+            return RedirectToAction("UploadPost");
         }
 
 
