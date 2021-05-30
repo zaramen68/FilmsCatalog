@@ -215,7 +215,7 @@ namespace TestAspFilm.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
        // public async Task<IActionResult> Create([Bind("Id,Name,Description,Year,Director,UserId,Poster")] Film film)
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Year,Director,UserId,Poster")] PostFilm film)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,Year,Director,UserId,uploadedFile")] PostFilm film)
         {
             if (ModelState.IsValid)
             {
