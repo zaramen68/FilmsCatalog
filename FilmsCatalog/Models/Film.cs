@@ -11,6 +11,19 @@ namespace FilmsCatalog.Models
 {
     public class Film
     {
+        /*
+        public Film(int id, string name, string description, int year, string director, string userid, byte[] poster)
+        {
+            Id = id;
+            Name = name;
+            Description = description;
+            Year = year;
+            Director = director;
+            UserId = userid;
+            Poster = poster;
+        }
+        */
+
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
