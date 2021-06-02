@@ -99,10 +99,13 @@ namespace TestAspFilm.Controllers
         }
 
         // GET: Films
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder,
+            int? pageNumber)
         {
             var filmDbContext = _context.Films.Include(f => f.User);
-            return View(await filmDbContext.ToListAsync());
+            //return View(await filmDbContext.ToListAsync());
+            int pageSize = 3;
+            return View(await PaginatedList<Film>.CreateAsync(filmDbContext.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // GET: Films/Details/5

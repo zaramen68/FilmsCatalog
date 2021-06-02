@@ -1,6 +1,6 @@
 ﻿
 @using System
-@model IEnumerable<FilmsCatalog.Models.Film>
+@model PaginatedList<FilmsCatalog.Models.Film>
 @{
     ViewData["Title"] = "Index";
 }
@@ -14,22 +14,22 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                Name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                Description
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Year)
+                Year
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Director)
+                Director
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User)
+                User
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Poster)
+                Poster
             </th>
             <th></th>
         </tr>
@@ -54,7 +54,7 @@
                     @Html.DisplayFor(modelItem => item.User.UserName)
                 </td>
                 <td>
-                    <img src="data:image/jpg;base64, @Convert.ToBase64String(item.Poster)"  style="width: 150px; height: auto;"/>
+                    <img src="data:image/jpg;base64, @Convert.ToBase64String(item.Poster)" style="width: 150px; height: auto;" />
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
@@ -65,3 +65,24 @@
         }
     </tbody>
 </table>
+
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>
